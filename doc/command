@@ -1,0 +1,144 @@
+## /command
+
+POST commands with JSON to the following address.
+
+``` 
+/commmand/<device>/<number>
+```
+
+The body of JSON:
+
+``` 
+{
+    "_time":
+    "state": "on|off|1|2|3..."
+}
+```
+
+All commands below follow the settings in [configuration file](https://github.com/nczitzk/maison/blob/master/config.toml).
+
+### Light
+
+All lights __ON/OFF__:
+
+``` 
+/command/light/0/
+```
+
+``` 
+{
+    "state": "on|off"
+}
+```
+
+Light No.\[1-7\] __ON/OFF__
+
+``` 
+/command/light/[1-7]/
+```
+
+``` 
+{
+    "state": "on|off"
+}
+```
+
+### Fan
+
+All Fans __OFF/G1/G2/G3__:
+
+``` 
+/command/fan/0/
+```
+
+``` 
+{
+    "speed": "0|1|2|3"
+}
+```
+
+Fan No.\[1-6\] __OFF/G1/G2/G3__:
+
+``` 
+/command/fan/[1-6]/
+```
+
+``` 
+{
+    "speed": "0|1|2|3"
+}
+```
+
+### Curtain
+
+Curtain No.\[1\] __ON/OFF/PAUSE__:
+
+``` 
+/command/curtain/[1]/
+```
+
+``` 
+{
+    "state": "on|off|pause"
+}
+```
+
+### AC
+
+``` 
+/command/ac/(27|33|44|62)/
+```
+
+AC No.(27|33|44|62) __ON/OFF__
+
+``` 
+{
+    "state": "on|off"
+}
+```
+
+AC No.(27|33|44|62) Mode __AUTO/COOL/DRY/FAN/HEAT__
+
+``` 
+{
+    "mode": "auto|cool|dry|fan|heat"
+}
+```
+
+AC No.(27|33|44|62) Speed __AUTO/LOW/HIGH__
+
+```
+{
+    "speed": "auto|low|high"
+}
+```
+
+AC No.(27|33|44|62) Swing __AUTO/MANUAL__
+
+```
+{
+    "swing": "auto|manual"
+}
+```
+
+AC No.(27|33|44|62) Temp __\[16-30\]__
+
+```
+{
+    "temp": "[16-30]"
+}
+```
+
+### Scenario
+
+``` 
+/command/scenario/0/
+```
+
+Turn certain mode __ON/OFF__
+
+``` 
+{
+    "classmode|smartmode": "on|off"
+}
+```
