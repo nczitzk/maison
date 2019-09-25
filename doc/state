@@ -1,0 +1,89 @@
+## /state
+
+POST state query statements with JSON to the following address.
+
+``` 
+/state/<device>/<number>
+```
+
+The body of JSON:
+
+``` 
+{
+    "states": "key(,key,key...)|*", // Optional, "*" by default returning all states of the device
+    "where": "where_parameter",     // Optional, null by default
+    "timezone": "Asia/Shanghai",    // Optional, "Asia/Shanghai" by default
+    "time_reverse": true|false,     // Optional, true by default
+    "limit": 1                      // Optional, 1 by default, range between 1 to 50
+}
+```
+
+> More details about WHERE clause can be found [here](https://docs.influxdata.com/influxdb/v1.7/query_language/data_exploration/#the-where-clause)
+
+Here are some examples :D
+
+All states info mentioned below follow the settings in [configuration file](https://github.com/nczitzk/maison/blob/master/config.toml).
+
+### Fetch Light No.1 (light_1) all states info
+
+POST /state/light/1
+
+```
+{}
+```
+
+### Fetch Fan No.1 (fan_1) all states info when 2019-08-08T20:08:19Z
+
+POST /state/fan/1
+
+```
+{
+    "where": "time = '2019-08-08T20:08:19Z'",
+}
+```
+
+### Only fetch AC No.27 (ac_27) the last 5 updates of Mode and Temperature in chronological order
+
+POST /state/ac/27
+
+```
+{
+    "state": "mode, temp",
+    "time_reverse": false,
+    "limit": 5
+}
+```
+
+### Return JSON
+
+Take the ac_27 example.
+
+```
+[
+    {
+        "time": "2019-08-10T11:16:18Z", 
+        "mode": 4, 
+        "temp": 16
+    }, 
+    {
+        "time": "2019-08-10T11:06:01Z", 
+        "mode": 1, 
+        "temp": 23
+    }, 
+    {
+        "time": "2019-08-10T11:04:44Z", 
+        "mode": 2, 
+        "temp": 25
+    }, 
+    {
+        "time": "2019-08-10T10:59:58Z", 
+        "mode": 1, 
+        "temp": 25
+    }
+    {
+        "time": "2019-08-10T10:53:34Z", 
+        "mode": 1, 
+        "temp": 25
+    }
+]
+```
