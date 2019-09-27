@@ -1,0 +1,140 @@
+## State Code Sheet
+
+State codes through MQTT from LoRa Server are packed into the JSON field "data". This is the general format:
+
+```
+a_b_c
+```
+```
+a - device ID (eg. light for 1, fan for 2...)
+_ - placeholder
+b - function number
+_ - placeholder
+c - state number
+```
+
+Let me give you an example. All infomation below are defined in configuration file.
+
+### Light
+
+```
+Light_1 OFF: 1_x_0
+Light_1 ON : 1_x_1
+```
+
+Similarly
+
+```
+Light_x OFF: 1_x_0
+Light_x ON : 1_x_1
+```
+
+### Fan
+
+```
+Fan
+
+Fan_1 OFF: 2_x_0
+Fan_1 L1 : 2_x_1
+Fan_1 L2 : 2_x_2
+Fan_1 L3 : 2_x_3
+```
+
+Similarly
+
+```
+Fan_x OFF: 2_x_0
+Fan_x L1 : 2_x_1
+Fan_x L2 : 2_x_2
+Fan_x L3 : 2_x_3
+```
+
+### Curtain
+
+```
+Curtain_1 OFF  : 3_x_0
+Curtain_1 ON   : 3_x_1
+Curtain_1 PAUSE: 3_x_2
+```
+
+Similarly
+
+```
+Curtain_x OFF  : 3_x_0
+Curtain_x ON   : 3_x_1
+Curtain_x PAUSE: 3_x_2
+```
+
+### AC
+
+```
+AC_1 ON : 4_x_on
+AC_1 OFF: 4_x_off
+
+AC_1 Mode AUTO: 4_x_mode_auto
+AC_1 Mode COOL: 4_x_mode_cool
+AC_1 Mode DRY : 4_x_mode_dry
+AC_1 Mode FAN : 4_x_mode_fan
+AC_1 Mode HEAT: 4_x_mode_heat
+
+AC_1 Speed AUTO: 4_x_speed_auto
+AC_1 Speed L1  : 4_x_speed_1
+AC_1 Speed L2  : 4_x_speed_2
+AC_1 Speed L3  : 4_x_speed_3
+
+AC_1 Swing AUTO  : 4_x_swing_auto
+AC_1 Swing MANUAL: 4_x_swing_manual
+
+AC_1 Temperature 16: 4_x_temp_16
+AC_1 Temperature 17: 4_x_temp_17
+AC_1 Temperature 18: 4_x_temp_18
+AC_1 Temperature 19: 4_x_temp_19
+AC_1 Temperature 20: 4_x_temp_20
+AC_1 Temperature 21: 4_x_temp_21
+AC_1 Temperature 22: 4_x_temp_22
+AC_1 Temperature 23: 4_x_temp_23
+AC_1 Temperature 24: 4_x_temp_24
+AC_1 Temperature 25: 4_x_temp_25
+AC_1 Temperature 26: 4_x_temp_26
+AC_1 Temperature 27: 4_x_temp_27
+AC_1 Temperature 28: 4_x_temp_28
+AC_1 Temperature 29: 4_x_temp_29
+AC_1 Temperature 30: 4_x_temp_30
+```
+
+Similarly
+
+```
+AC_x ON : 4_x_on
+AC_x OFF: 4_x_off
+
+AC_x Mode AUTO: 4_x_mode_auto
+AC_x Mode COOL: 4_x_mode_cool
+AC_x Mode DRY : 4_x_mode_dry
+AC_x Mode FAN : 4_x_mode_fan
+AC_x Mode HEAT: 4_x_mode_heat
+
+AC_x Speed AUTO: 4_x_speed_auto
+AC_x Speed L1  : 4_x_speed_1
+AC_x Speed L2  : 4_x_speed_2
+AC_x Speed L3  : 4_x_speed_3
+
+AC_x Swing AUTO  : 4_x_swing_auto
+AC_x Swing MANUAL: 4_x_swing_manual
+
+AC_x Temperature 16: 4_x_temp_16
+AC_x Temperature 17: 4_x_temp_17
+AC_x Temperature 18: 4_x_temp_18
+AC_x Temperature 19: 4_x_temp_19
+AC_x Temperature 20: 4_x_temp_20
+AC_x Temperature 21: 4_x_temp_21
+AC_x Temperature 22: 4_x_temp_22
+AC_x Temperature 23: 4_x_temp_23
+AC_x Temperature 24: 4_x_temp_24
+AC_x Temperature 25: 4_x_temp_25
+AC_x Temperature 26: 4_x_temp_26
+AC_x Temperature 27: 4_x_temp_27
+AC_x Temperature 28: 4_x_temp_28
+AC_x Temperature 29: 4_x_temp_29
+AC_x Temperature 30: 4_x_temp_30
+```
