@@ -1,10 +1,12 @@
-import config
+from config import configs
 from utils import judge, get_timestamp
 from cache import query_database, add_cron
 
 import time
 import json
 from mqtt import issue_command
+
+keys = json.loads(configs["device"]["_keys"])
 
 
 def state_handler(device, number, form):
@@ -56,29 +58,29 @@ def command_handler(device, number, form):
     timer = ""
 
     for (key, value) in form.items():
-        if key in config.keys[device]:
-            if value not in config.keys[device][key]:
+        if key in keys[device]:
+            if value not in keys[device][key]:
                 errors.append("value \"{}\" is not included in key \"{}\" of \"{}\" devices:\n".format(
-                    value, key, device) + ", ".join(config.keys[device][key]))
+                    value, key, device) + ", ".join(keys[device][key]))
                 continue
 
             # "state" is ignored (see readme/command_code or readme/state_code)
             # Some values need to be translated into number form.
             states_str = "" if key == "state" else key + "_"
-            value_str = config.values[str(value)] if str(
-                value) in config.values else str(value)
+            value_str = configs["value"][str(value)] if str(
+                value) in configs["value"] else str(value)
 
             # If commands acting on all devices of same type,
             # then push them into queue.
             if number == 0:
-                for device_num in config.devices[device]:
+                for device_num in configs["devices"][device]:
                     queue["#{}_{}_{}{}".format(
-                        config.ids[device], device_num, states_str, value_str)] = device_num
+                        configs["id"][device], device_num, states_str, value_str)] = device_num
                     results.append("{}_{}::{} -> {}".format(
                         device, device_num, key, value_str))
             else:
                 queue["#{}_{}_{}{}".format(
-                    config.ids[device], number, states_str, value_str)] = str(number)
+                    configs["id"][device], number, states_str, value_str)] = str(number)
                 results.append("{}_{}::{} -> {}".format(
                     device, number, key, value_str))
         elif key == "_timer":
@@ -92,18 +94,18 @@ def command_handler(device, number, form):
     if cron:
         for (command, device_num) in queue.items():
             add_cron(
-                timer, config.devEUIs["{}_{}".format(device, device_num)], command)
+                timer, configs["devEUI"]["{}_{}".format(device, device_num)], command)
     else:
         for (command, device_num) in queue.items():
             issue_command(
-                config.devEUIs["{}_{}".format(device, device_num)], command)
+                configs["devEUI"]["{}_{}".format(device, device_num)], command)
 
     # To generate the output for results
     output = (("the following commands {} issued{}:\n> {}".format(
         "will be" if cron else "have been",
         " at {}".format(timer) if cron else "",
         "\n> ".join(results))) if results else "") + \
-        ((("\n" if results else "") + \
-        "errors have occured when parsing commands below:\n> {}".format(
-        "\n> ".join(errors))) if errors else "")
+        ((("\n" if results else "") +
+          "errors have occured when parsing commands below:\n> {}".format(
+            "\n> ".join(errors))) if errors else "")
     return output
