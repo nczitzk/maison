@@ -1,5 +1,5 @@
+from config import configs
 from mqtt import init, run_cron
-from config import app_host, app_port
 from handlers import state_handler, command_handler
 
 import os
@@ -13,13 +13,13 @@ path = os.path.dirname(os.path.abspath(__file__))
 
 @app.route("/", methods=['GET', 'POST'])
 async def main(request):
-    return text("Please GET /states or /command to fetch README")
+    return text("Please GET /states or /command to fetch API docs")
 
 
 @app.get("/state/")
-async def state_readme(request):
-    """To load state README."""
-    with open(os.path.join(path, "readme", "state"), 'r') as f:
+async def state_doc(request):
+    """To fetch /state API doc."""
+    with open(os.path.join(path, "doc", "state"), 'r') as f:
         return text(f.read())
 
 
@@ -30,9 +30,9 @@ async def state(request, device, number):
 
 
 @app.get("/command/")
-async def command_readme(request):
-    """To load command README."""
-    with open(os.path.join(path, "readme", "commands"), 'r') as f:
+async def command_doc(request):
+    """To fetch /command API doc."""
+    with open(os.path.join(path, "doc", "command"), 'r') as f:
         return text(f.read())
 
 
@@ -51,4 +51,4 @@ if __name__ == "__main__":
     command_thread.start()
     state_thread.start()
     run_cron(3)
-    app.run(host=app_host, port=app_port)
+    app.run(host=configs["app_host"], port=configs["app_port"])
