@@ -1,4 +1,4 @@
-import config
+from config import configs
 from utils import judge
 from cache import queue, write_database
 
@@ -9,8 +9,9 @@ import base64
 from threading import Timer
 import paho.mqtt.client as mqtt
 
-state_client = mqtt.Client(config.client_name+"_state")
-command_client = mqtt.Client(config.client_name+"_command")
+state_client = mqtt.Client(configs["client_name"]+"_state")
+command_client = mqtt.Client(configs["client_name"]+"_command")
+keys = json.loads(configs["device"]["_keys"])
 
 
 def issue_command(devEUI, command, client_type="tx"):
@@ -29,7 +30,7 @@ def issue_command(devEUI, command, client_type="tx"):
         "data": command
     }
     command_client.publish("application/{applicationId}/device/{devEUI}/{client_type}".format(
-        applicationId=config.applicationId, devEUI=devEUI, client_type=client_type), json.dumps(data), qos=1)
+        applicationId=configs["applicationId"], devEUI=devEUI, client_type=client_type), json.dumps(data), qos=1)
 
 
 def parse_data(devEUI, data):
@@ -62,14 +63,14 @@ def parse_data(devEUI, data):
         issue_command(
             devEUI, "\"{}_{}\" does not exist".format(device, number))
         return
-    if key not in config.keys[device]:
+    if key not in keys[device]:
         issue_command(
-            devEUI, "devices \"{}\" have no key \"{}\"".format(device, key))
+            devEUI, "\"{}\" devices have no key \"{}\"".format(device, key))
         return
-    if value not in config.keys[device][key]:
+    if value not in keys[device][key]:
         issue_command(
-            devEUI, "value \"{}\" is not included in key \"{}\" of devices \"{}\":".format(value, key, device) +
-            ", ".join(config.keys[device][key]))
+            devEUI, "value \"{}\" is not included in key \"{}\" of \"{}\" devices:\n".format(value, key, device) +
+            ", ".join(keys[device][key]))
         return
     # To print for debug
     print("RECEIVED : {}_{}".format(device, number), key, value)
@@ -80,7 +81,7 @@ def on_connect(client_type):
     def connect_callback(client, userdata, flags, rc):
         client.subscribe(
             "application/{applicationId}/device/+/{client_type}".format(
-                applicationId=config.applicationId, client_type=client_type), qos=1)
+                applicationId=configs["applicationId"], client_type=client_type), qos=1)
     return connect_callback
 
 
@@ -97,7 +98,7 @@ def init(client_type):
         client.on_connect = on_connect(client_type)
         if client_type is "rx":
             client.on_message = on_message
-        client.connect(config.broker_host)
+        client.connect(configs["broker_host"])
         client.loop_forever()
     return client_init
 
