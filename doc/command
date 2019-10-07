@@ -10,7 +10,9 @@ The body of JSON:
 
 ``` 
 {
-    "_time":
+    // Optional, the command will be issued at that time (ep."2019-10-01 10:00:00 2"), null by default
+    "_time": "%Y-%m-%d %H:%M:%S %w",
+
     "state": "on|off|1|2|3..."
 }
 ```
