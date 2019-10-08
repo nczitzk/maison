@@ -55,7 +55,7 @@ def command_handler(device, number, form):
     errors = []
     # If commands contain "_time", then make it a cron job
     cron = False
-    timer = ""
+    time = ""
 
     for (key, value) in form.items():
         if key in keys[device]:
@@ -83,8 +83,8 @@ def command_handler(device, number, form):
                     configs["id"][device], number, states_str, value_str)] = str(number)
                 results.append("{}_{}::{} -> {}".format(
                     device, number, key, value_str))
-        elif key == "_timer":
-            timer = value
+        elif key == "_time":
+            time = value
             cron = True
         else:
             errors.append(
@@ -94,7 +94,7 @@ def command_handler(device, number, form):
     if cron:
         for (command, device_num) in queue.items():
             add_cron(
-                timer, configs["devEUI"]["{}_{}".format(device, device_num)], command)
+                time, configs["devEUI"]["{}_{}".format(device, device_num)], command)
     else:
         for (command, device_num) in queue.items():
             issue_command(
@@ -103,7 +103,7 @@ def command_handler(device, number, form):
     # To generate the output for results
     output = (("the following commands {} issued{}:\n> {}".format(
         "will be" if cron else "have been",
-        " at {}".format(timer) if cron else "",
+        " at {}".format(time) if cron else "",
         "\n> ".join(results))) if results else "") + \
         ((("\n" if results else "") +
           "errors have occured when parsing commands below:\n> {}".format(
